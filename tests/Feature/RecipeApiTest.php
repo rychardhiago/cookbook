@@ -5,6 +5,7 @@ use App\Domain\Recipes\Models\Recipe;
 use App\Domain\Users\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RecipeApiTest extends TestCase
 {
@@ -32,7 +33,7 @@ class RecipeApiTest extends TestCase
         return 'Bearer '.$token;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_recipe_with_ingredients()
     {
         $payload = [
@@ -53,7 +54,7 @@ class RecipeApiTest extends TestCase
         $this->assertDatabaseHas('ingredients', ['name' => 'Açúcar']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_recipes_with_pagination_and_sorting()
     {
         Recipe::factory()->count(15)->create();
@@ -64,7 +65,7 @@ class RecipeApiTest extends TestCase
             ->assertJsonStructure(['data', 'current_page', 'last_page', 'per_page']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_recipes_by_ingredient()
     {
         $recipe = Recipe::factory()->create(['name' => 'Com Chocolate']);
@@ -76,7 +77,7 @@ class RecipeApiTest extends TestCase
             ->assertJsonFragment(['name' => 'Com Chocolate']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_a_single_recipe_with_ingredients()
     {
         $recipe = Recipe::factory()->create();
@@ -88,7 +89,7 @@ class RecipeApiTest extends TestCase
             ->assertJsonFragment(['name' => 'Açúcar']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_a_recipe_and_replace_ingredients()
     {
         $recipe = Recipe::factory()->create(['name' => 'Antigo']);
@@ -111,7 +112,7 @@ class RecipeApiTest extends TestCase
         $this->assertDatabaseHas('ingredients', ['name' => 'Novo Ingrediente']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_delete_a_recipe_and_its_ingredients()
     {
         $recipe = Recipe::factory()->create();
@@ -125,7 +126,7 @@ class RecipeApiTest extends TestCase
         $this->assertDatabaseMissing('ingredients', ['recipe_id' => $recipe->id]);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_required_fields_when_creating_recipe()
     {
         $response = $this->postJson('/api/recipes', [], ['Authorization' => $this->authenticatedHeaders()]);
@@ -134,7 +135,7 @@ class RecipeApiTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_ingredient_name_is_required()
     {
         $payload = [
@@ -150,7 +151,7 @@ class RecipeApiTest extends TestCase
             ->assertJsonValidationErrors(['ingredients.0.name']);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_when_recipe_not_found()
     {
         $response = $this->getJson('/api/recipes/999', ['Authorization' => $this->authenticatedHeaders()]);
@@ -158,7 +159,7 @@ class RecipeApiTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_when_deleting_non_existing_recipe()
     {
         $response = $this->deleteJson('/api/recipes/999', ['Authorization' => $this->authenticatedHeaders()]);
@@ -166,7 +167,7 @@ class RecipeApiTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_invalid_sort_column_and_falls_back_to_default()
     {
         Recipe::factory()->count(5)->create();

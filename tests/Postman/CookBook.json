@@ -1,98 +1,187 @@
 {
-  "info": {
-    "name": "Recipe API Collection",
-    "_postman_id": "1cfc77a2-8b7d-4e65-b820-ae0a3fdd0c2a",
-    "description": "Coleção para testar a API de receitas com ingredientes.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Listar Receitas",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/api/recipes",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["api", "recipes"]
-        }
-      }
-    },
-    {
-      "name": "Ver Receita por ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/api/recipes/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["api", "recipes", "1"]
-        }
-      }
-    },
-    {
-      "name": "Criar Receita",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Bolo de Chocolate\",\n  \"description\": \"Delicioso bolo de chocolate com cobertura.\",\n  \"ingredients\": [\n    {\n      \"name\": \"Farinha de trigo\",\n      \"quantity\": \"2 xícaras\"\n    },\n    {\n      \"name\": \"Açúcar\",\n      \"quantity\": \"1 xícara\"\n    },\n    {\n      \"name\": \"Chocolate em pó\",\n      \"quantity\": \"1/2 xícara\"\n    }\n  ]\n}"
-        },
-        "url": {
-          "raw": "http://localhost:8000/api/recipes",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["api", "recipes"]
-        }
-      }
-    },
-    {
-      "name": "Atualizar Receita",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Bolo de Cenoura\",\n  \"description\": \"Bolo de cenoura com cobertura de chocolate.\",\n  \"ingredients\": [\n    {\n      \"name\": \"Cenoura\",\n      \"quantity\": \"2 unidades\"\n    },\n    {\n      \"name\": \"Farinha de trigo\",\n      \"quantity\": \"2 xícaras\"\n    }\n  ]\n}"
-        },
-        "url": {
-          "raw": "http://localhost:8000/api/recipes/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["api", "recipes", "1"]
-        }
-      }
-    },
-    {
-      "name": "Excluir Receita",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/api/recipes/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["api", "recipes", "1"]
-        }
-      }
-    }
-  ]
+	"info": {
+		"_postman_id": "91b6a292-f2a9-4818-8358-765f0955a029",
+		"name": "CookBook",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11124652"
+	},
+	"item": [
+		{
+			"name": "Recipes",
+			"item": []
+		},
+		{
+			"name": "api/register",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hiago 3\",\r\n    \"email\": \"rychard_hiago3@hotmail.com\",\r\n    \"password\": \"12345678@\",\r\n    \"password_confirmation\": \"12345678@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/login",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"rychardhiago@gmail.com\",\r\n    \"password\": \"12345678@11111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Rychard Hiago\",\r\n    \"email\": \"rychardhiago@gmail.com\",\r\n    \"password\": \"12345678@\",\r\n    \"password_confirmation\": \"12345678@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/logout",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Rychard Hiago\",\r\n    \"email\": \"rychardhiago@gmail.com\",\r\n    \"password\": \"12345678@\",\r\n    \"password_confirmation\": \"12345678@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }
