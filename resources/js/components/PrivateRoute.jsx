@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 export default function PrivateRoute({ children }) {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <p>Carregando...</p>; // pode ser um spinner bonito depois
+        return <div>Carregando...</div>;
     }
 
-    return user ? children : <Navigate to="/login" />;
+    return user ? children : <Navigate to="/login" replace />;
 }

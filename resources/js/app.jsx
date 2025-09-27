@@ -1,25 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Recipes from "./pages/Recipes";
-import PrivateRoute from "./components/PrivateRoute";
+import RecipeDetail from "./pages/RecipeDetail";
+import RecipeForm from "./pages/RecipeForm";
 
-// 👇 Wrapper para lidar com rota inicial dinâmica
-function RootRedirect() {
-    const { user } = useAuth();
-    return user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
+function PrivateRoute({ children }) {
+    const { user, loading } = useAuth();
+
+    if (loading) return <div>Carregando...</div>;
+    return user ? children : <Navigate to="/login" replace />;
 }
 
-function App() {
+export default function App() {
     return (
-        <AuthProvider>
-            <BrowserRouter>
+        <Router>
+            <AuthProvider>
                 <Routes>
-                    <Route path="/" element={<RootRedirect />} />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
@@ -42,12 +44,36 @@ function App() {
                         }
                     />
 
-                    {/* 👇 qualquer rota inválida redireciona de acordo com login */}
-                    <Route path="*" element={<RootRedirect />} />
+                    <Route
+                        path="/recipes/new"
+                        element={
+                            <PrivateRoute>
+                                <RecipeForm />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/recipes/:id"
+                        element={
+                            <PrivateRoute>
+                                <RecipeDetail />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/recipes/:id/edit"
+                        element={
+                            <PrivateRoute>
+                                <RecipeForm />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
-            </BrowserRouter>
-        </AuthProvider>
+            </AuthProvider>
+        </Router>
     );
 }
-
-ReactDOM.createRoot(document.getElementById("app")).render(<App />);

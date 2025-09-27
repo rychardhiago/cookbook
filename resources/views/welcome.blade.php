@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta charset="utf-8">
+    <title>Cookbook</title>
     @viteReactRefresh
-    @vite('resources/js/app.jsx')
+    @vite('resources/js/bootstrap.jsx')
 </head>
-<body>
+<body class="antialiased">
 <div id="app"></div>
 </body>
 </html>
