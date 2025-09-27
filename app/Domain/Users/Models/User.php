@@ -2,6 +2,7 @@
 
 namespace App\Domain\Users\Models;
 
+use Database\Factories\UserFactory;
 use App\Infrastructure\Http\Requests\Api\CreateUserRequest;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -33,6 +34,11 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 
     /**
      * Get the attributes that should be cast.
