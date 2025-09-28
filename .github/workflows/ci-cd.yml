@@ -3,11 +3,9 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build-test-sonar:
+  build-test-sonar-deploy:
     runs-on: ubuntu-latest
 
     services:
@@ -28,7 +26,7 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      # Node para frontend (React + Vite)
+      # Node.js para React
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -41,7 +39,7 @@ jobs:
         run: npm test -- --coverage
         continue-on-error: true
 
-      # PHP para backend (Laravel)
+      # PHP para Laravel
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -49,7 +47,7 @@ jobs:
           extensions: mbstring, pdo, mysql, bcmath
 
       - name: Instalar dependências PHP
-        run: composer install --no-progress --prefer-dist
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Rodar migrations
         run: php artisan migrate --env=testing --force
@@ -66,3 +64,30 @@ jobs:
           -Dsonar.sources=app,resources/js \
           -Dsonar.php.coverage.reportPaths=storage/coverage/clover.xml \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      # Build do frontend
+      - name: Build React + Vite
+        run: npm run build
+
+      # Deploy para servidor via SSH
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote-user: ${{ secrets.SERVER_USER }}
+          server-ip: ${{ secrets.SERVER_IP }}
+          remote-path: /var/www/cookbook
+          local-path: |
+            app
+            bootstrap
+            config
+            database
+            public
+            resources
+            routes
+            storage
+            artisan
+            composer.json
+            composer.lock
+            package.json
+            vite.config.js
