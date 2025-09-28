@@ -1,0 +1,68 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test-sonar:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: cookbook_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      # Node para frontend (React + Vite)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Instalar dependências JS
+        run: npm install
+
+      - name: Rodar testes React
+        run: npm test -- --coverage
+        continue-on-error: true
+
+      # PHP para backend (Laravel)
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, pdo, mysql, bcmath
+
+      - name: Instalar dependências PHP
+        run: composer install --no-progress --prefer-dist
+
+      - name: Rodar migrations
+        run: php artisan migrate --env=testing --force
+
+      - name: Rodar testes Laravel
+        run: vendor/bin/phpunit --coverage-clover=storage/coverage/clover.xml
+
+      # SonarQube Scan
+      - name: SonarQube Scan
+        run: npx sonar-scanner \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.projectKey=cookbook \
+          -Dsonar.sources=app,resources/js \
+          -Dsonar.php.coverage.reportPaths=storage/coverage/clover.xml \
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info

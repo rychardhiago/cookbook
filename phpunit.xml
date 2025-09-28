@@ -30,4 +30,8 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
     </php>
+    <logging>
+        <log type="coverage-clover" target="storage/coverage/clover.xml"/>
+        <log type="junit" target="storage/test-reports/junit.xml"/>
+    </logging>
 </phpunit>
