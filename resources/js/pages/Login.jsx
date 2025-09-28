@@ -76,7 +76,6 @@ export default function Login() {
                     {loadingSubmit ? "Entrando..." : "Entrar"}
                 </button>
 
-                {/* 🔗 Link para página de registro */}
                 <p className="mt-4 text-center text-sm text-gray-600">
                     Não tem conta?{" "}
                     <Link to="/register" className="text-blue-600 hover:underline">

@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
             api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
             try {
-                const { data } = await api.get("/auth/me"); // /api/auth/me
+                const { data } = await api.get("/user");
                 if (mounted) setUser(data);
             } catch (err) {
                 console.error("Auth init failed:", err);
@@ -45,14 +45,13 @@ export function AuthProvider({ children }) {
     // login: retorna o usuário carregado
     const login = async (email, password) => {
         const { data } = await api.post("/login", { email, password });
-        // adapta para possíveis formatos de resposta
+
         const token = data.access_token ?? data.token ?? data;
         if (!token) throw new Error("Token não encontrado na resposta de login");
 
         localStorage.setItem("token", token);
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        // buscar /auth/me para popular o user (mais seguro)
         const { data: me } = await api.get("/user");
         setUser(me.data);
         return me;
